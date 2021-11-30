@@ -1,0 +1,53 @@
+name: cftime test on native linux distributions
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  ubuntu1804:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: lsb_release -a
+        run: lsb_release -a
+      - name: install dependencies
+        run: sudo apt-get install --no-install-recommends cython3 gcc python3-cryptography python3-dev python3-numpy python3-pip python3-setuptools python3-wheel
+      - name: install requirements
+        run: pip3 install -r requirements.txt -r requirements-dev.txt
+      - name: install cftime
+        run: pip3 install -v -e  . --no-deps --force-reinstall
+      - name: run pytest
+        run: pytest -vv test
+   ubuntu1804_cython_numpy:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: lsb_release -a
+        run: lsb_release -a
+      - name: install dependencies
+        run: sudo apt-get install --no-install-recommends gcc python3-cryptography python3-dev python3-pip python3-setuptools python3-wheel
+      - name: enhance requirements
+        run: |
+          sed -i 's/cython/cython>0.26.1/g' requirements*.txt
+          sed -i 's/numpy/numpy>1.13.3/g' requirements*.txt
+      - name: install requirements
+        run: pip3 install -r requirements.txt -r requirements-dev.txt
+      - name: install cftime
+        run: pip3 install -v -e  . --no-deps --force-reinstall
+      - name: run pytest
+        run: pytest -vv test
+ ubuntu2004:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: lsb_release -a
+        run: lsb_release -a
+      - name: install dependencies
+        run: sudo apt-get install --no-install-recommends cython3 gcc python3-dev python3-dev python3-numpy python3-pip python3-setuptools
+      - name: install requirements
+        run: pip3 install -r requirements.txt -r requirements-dev.txt
+      - name: install cftime
+        run: pip3 install -v -e  . --no-deps --force-reinstall
+      - name: run pytest
+        run: pytest -vv test
