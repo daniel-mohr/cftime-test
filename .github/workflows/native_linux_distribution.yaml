@@ -19,7 +19,7 @@ jobs:
         run: pip3 install -v -e  . --no-deps --force-reinstall
       - name: run pytest
         run: pytest -vv test
-   ubuntu1804_cython_numpy:
+  ubuntu1804_cython_numpy:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
